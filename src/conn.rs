@@ -139,10 +139,12 @@ impl<T: EventMessage + Unpin> Stream for Connection<T> {
                 return match serde_json::from_slice::<Message<T>>(&msg.into_data()) {
                     Ok(msg) => {
                         tracing::trace!("Received {:?}", msg);
+                        println!("Received {:#?}", msg);
                         Poll::Ready(Some(Ok(msg)))
                     }
                     Err(err) => {
                         tracing::error!("Failed to deserialize WS response {}", err);
+                        println!("Failed to deserialize WS response: {:#?}", err);
                         Poll::Ready(Some(Err(err.into())))
                     }
                 };
